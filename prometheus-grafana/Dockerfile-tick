@@ -1,0 +1,14 @@
+FROM golang:1.12.14-alpine3.10
+
+ENV PORT $PORT
+ENV APPLICATION_NAME $APPLICATION_NAME
+
+WORKDIR /go/src/tick
+COPY service/tick.go .
+
+RUN go get -d -v ./...
+RUN go install -v ./...
+
+EXPOSE $PORT
+
+CMD ["tick"]
