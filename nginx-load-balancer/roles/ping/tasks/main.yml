@@ -1,0 +1,39 @@
+- name: install git
+  yum:
+    name: git
+    state: latest
+
+- name: download app from github
+  git:
+    repo: "https://github.com/ekowcharles/ping.git"
+    dest: /app/go/src/ping
+    version: nginx
+    force: yes
+    update: yes
+
+- name: install app
+  command:
+    cmd: go install ping
+
+- name: copy over systemd configuration
+  copy:
+    src: ping{{ item }}.service
+    dest: /etc/systemd/system/ping{{ item }}.service
+    mode: u+rwx,g-r,o-r
+    backup: yes
+  loop:
+    - 4567
+    - 4568
+    - 4569
+
+- name: start services
+  systemd:
+    name: ping{{ item }}
+    force: yes
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+  loop:
+    - 4567
+    - 4568
+    - 4569

@@ -1,0 +1,8 @@
+fileignoreconfig:
+- filename: nginx-load-balancer/roles/golang/tasks/main.yml
+  checksum: c05df1d9c59a52a758084ff660d648716ab6c12c1fac7861214c569c99c08d23
+  ignore_detectors: []
+- filename: nginx-load-balancer/README.md
+  checksum: bbeadbaa58e1d04f11655c9e6287bc199c170e329a9bd561e6cf6941f524b6de
+  ignore_detectors: []
+scopeconfig: []

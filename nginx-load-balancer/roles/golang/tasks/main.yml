@@ -1,0 +1,44 @@
+- name: create app directory
+  file:
+    dest: /app
+    state: directory
+
+- name: download golang package
+  get_url:
+    url: https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
+    dest: /tmp
+    checksum: sha256:1862f4c3d3907e59b04a757cfda0ea7aa9ef39274af99a784f5be843c80c6772
+
+- name: unzip golang tarball
+  unarchive:
+    src: /tmp/go1.8.3.linux-amd64.tar.gz
+    dest: /usr/local
+    remote_src: yes
+
+- name: Set GOPATH in profile
+  lineinfile:
+    dest: /etc/profile
+    state: present
+    regexp: "^GOPATH"
+    line: "GOPATH={{ go_path }}"
+
+- name: Set PATH in profile
+  lineinfile:
+    dest: /etc/profile
+    state: present
+    regexp: "^PATH"
+    line: "PATH={{ ansible_env.PATH }}:{{ go_binary_path }}"
+
+- name: Set GOPATH in environment
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: "^GOPATH"
+    line: "GOPATH={{ go_path }}"
+
+- name: Set PATH in environment
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: "^PATH"
+    line: "PATH={{ ansible_env.PATH }}:{{ go_binary_path }}"

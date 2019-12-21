@@ -1,0 +1,11 @@
+[Unit]
+Description=ping running on port 4569
+
+[Service]
+Type=simple
+Environment="PORT=4569"
+ExecStart=/app/go/bin/ping
+ExecStop=/usr/bin/kill $(lsof -i tcp:4569 -t)
+
+[Install]
+WantedBy=multi-user.target

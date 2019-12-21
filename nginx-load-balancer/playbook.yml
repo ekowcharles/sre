@@ -1,0 +1,10 @@
+---
+- name: Setup nginx loadbalancer
+  hosts: "{{ server | default('all') }}"
+  become: yes
+  become_user: root
+  user: centos
+  roles:
+    - nginx
+    - golang
+    - ping
