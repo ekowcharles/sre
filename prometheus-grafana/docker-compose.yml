@@ -1,0 +1,67 @@
+version: "3.7"
+services:
+  service-a:
+    image: tick:latest
+    container_name: service-a
+    environment:
+      PORT: 8868
+      APPLICATION_NAME: service-a
+    ports:
+      - "8868:8868"
+    expose:
+      - "8868"
+    command: tick
+
+  service-b:
+    image: tick:latest
+    container_name: service-b
+    environment:
+      PORT: 8878
+      APPLICATION_NAME: service-b
+    ports:
+      - "8878:8878"
+    expose:
+      - "8878"
+    command: tick
+
+  service-c:
+    image: tick:latest
+    container_name: service-c
+    environment:
+      PORT: 8888
+      APPLICATION_NAME: service-c
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    command: tick
+
+  prometheus:
+    image: prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    expose:
+      - "9090"
+    links:
+      - service-a
+      - service-b
+      - service-c
+
+  grafana:
+    image: grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    links:
+      - prometheus
+    environment:
+      GRAFANA_VERSION: latest
+      GF_SECURITY_ADMIN_PASSWORD: do-not-use-me
+      GF_INSTALL_PLUGINS: grafana-clock-panel 1.0.3,grafana-simple-json-datasource
+
+volumes:
+  data01:
+    driver: local
