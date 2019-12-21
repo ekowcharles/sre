@@ -16,8 +16,8 @@ $ make all
 
 That should do the following:
 
-1. Build a docker images for `tick` - a service that simply spits out random metrics in the PQL format.
-1. Build a `prometheus` images using custom configuration for jobs and targets.
+1. Build a docker image for `tick` - a service that simply spits out random metrics in the PQL format.
+1. Build a `prometheus` image using custom configuration for jobs and targets.
 1. Build `grafana` image ready with prometheus data source and a panel showing metrics collected from the `tick` services.
 1. Execute a docker compose file that wires up everything together.
 
