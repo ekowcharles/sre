@@ -1,0 +1,38 @@
+global:
+  evaluation_interval: 15s
+  external_labels:
+    config_type: static
+
+scrape_configs:
+  - job_name: static-job-a
+
+    scrape_interval: 5s
+    scrape_timeout: 5s
+
+    metrics_path: /metrics
+
+    static_configs:
+      - targets:
+          - service-a:8868
+        labels:
+          group: group-1a
+
+      - targets:
+          - service-c:8888
+        labels:
+          group: group-2a
+
+  - job_name: static-job-b
+
+    scrape_interval: 5s
+    scrape_timeout: 5s
+
+    metrics_path: /metrics
+
+    static_configs:
+      - targets:
+          - service-b:8878
+        labels:
+          group: group-1b
+# remote_write:
+#   - url: "http://localhost:6789/prometheus/"
