@@ -1,0 +1,7 @@
+FROM grafana/grafana:latest
+
+USER grafana
+
+ADD ./grafana/datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
+ADD ./grafana/dashboards.yml /etc/grafana/provisioning/dashboards/dashboards.yml
+ADD ./grafana/ticks_panel.json /etc/grafana/provisioning/dashboards/ticks.json
