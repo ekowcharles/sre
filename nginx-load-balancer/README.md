@@ -13,6 +13,12 @@ This piece of code illustrates how to provision nginx on a Centos 7 host to load
 1. The private key to be used host connection is `private.pem` and it is located at `~/Documents`.
 1. The backend services will be running on ports `4567`, `4568` and `4569`.
 
+## Stack
+
+1. [ansible](https://www.tutorialspoint.com/ansible/ansible_introduction.htm)
+1. [NGINX](https://www.nginx.com/resources/wiki/start/)
+1. [go](https://golang.org/doc/tutorial/getting-started)
+
 ## Usage
 
 Execute the following in your terminal to run the demo:

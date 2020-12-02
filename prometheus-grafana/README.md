@@ -6,6 +6,13 @@ Demo showing how to scrape service metrics and have them show up in Grafana.
 
 ![Design](./docs/images/design.png)
 
+## Stack
+
+1. [Docker](https://docker-curriculum.com/)
+1. [go](https://golang.org/doc/tutorial/getting-started)
+1. [Frafana](https://grafana.com/docs/grafana/latest/getting-started/getting-started/)
+1. [Prometheus](https://prometheus.io/docs/prometheus/latest/getting_started/)
+
 ## Usage
 
 Execute the following:

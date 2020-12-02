@@ -2,13 +2,13 @@
 
 # Stack
 
-1. vagrant
-1. ansible
-1. systemd
-1. rsyslog
-1. nginx
-1. go
-1. java
+1. [vagrant](https://learn.hashicorp.com/collections/vagrant/getting-started)
+1. [ansible](https://www.tutorialspoint.com/ansible/ansible_introduction.htm)
+1. [systemd](https://www.linux.com/training-tutorials/understanding-and-using-systemd/)
+1. [rsyslog](https://www.rsyslog.com/guides/)
+1. [NGINX](https://www.netguru.com/codestories/nginx-tutorial-basics-concepts)
+1. [go](https://golang.org/doc/tutorial/getting-started)
+1. [java](https://www.dropwizard.io/en/latest/getting-started.html)
 
 
 ## Generate key-pair
