@@ -1,0 +1,145 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "256"
+  end
+
+  config.vm.define "base" do |base|
+    base.vm.box = "hashicorp/bionic64"
+    base.vm.hostname = "base"
+
+    base.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "base"]
+    end
+
+    base.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "base" => ["base"]
+      }
+    end
+  end
+
+  log_server_host = "192.168.33.10"
+  log_server_port = 514
+  config.vm.define "log" do |log|
+    log.vm.box = "base.box"
+    log.vm.hostname = "log"
+
+    log.vm.network :private_network, ip: log_server_host
+
+    log.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "log"]
+    end
+
+    log.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "logserver" => ["log"]
+      }
+
+      ansible.host_vars = {
+        "log" => { 
+          "log_server_host" => log_server_host,
+          "log_server_port" => log_server_port
+        }
+      }
+    end
+  end
+
+  ping_app_host = "192.168.33.15"
+  ping_app_port = 8095
+  config.vm.define "ping" do |ping|
+    ping.vm.box = "base.box"
+    ping.vm.hostname = "ping"
+
+    ping.vm.network :forwarded_port, guest: ping_app_port, host: ping_app_port
+    ping.vm.network :private_network, ip: ping_app_host
+
+    ping.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "ping"]
+    end
+
+    ping.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "appserver" => ["ping"]
+      }
+
+      ansible.host_vars = {
+        "ping" => { 
+          "ping_port" => ping_app_port,
+          "log_server_host" => log_server_host,
+          "log_server_port" => log_server_port
+        }
+      }
+    end
+  end
+
+  config.vm.define "nginx" do |nginx|
+    nginx.vm.box = "base.box"
+    nginx.vm.hostname = "nginx"
+
+    nginx.vm.network :forwarded_port, guest: 80, host: 8080
+    nginx.vm.network :private_network, ip: "192.168.33.20"
+
+    nginx.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "nginx"]
+    end
+
+    nginx.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "webserver" => ["nginx"]
+      }
+
+      ansible.host_vars = {
+        "nginx" => {
+          "log_server_host" => log_server_host,
+          "log_server_port" => log_server_port,
+          "ping_app_host" => ping_app_host,
+          "ping_app_port" => ping_app_port
+        }
+      }
+    end
+  end
+end

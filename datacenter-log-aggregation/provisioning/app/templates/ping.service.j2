@@ -1,0 +1,16 @@
+[Unit]
+Description=Ping: go web app for demo purposes
+StartLimitIntervalSec=0
+
+[Service]
+Environment=PING_PORT={{ ping_port }}
+User={{ user }}
+ExecStart=/usr/local/go/bin/go run {{ ping_workspace.path }}/ping.go
+Restart=always
+RestartSec=1
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ping.service
+
+[Install]
+WantedBy=multi-user.target

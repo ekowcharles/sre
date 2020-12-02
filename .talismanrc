@@ -5,4 +5,7 @@ fileignoreconfig:
 - filename: nginx-load-balancer/README.md
   checksum: bbeadbaa58e1d04f11655c9e6287bc199c170e329a9bd561e6cf6941f524b6de
   ignore_detectors: []
+- filename: datacenter-log-aggregation/provisioning/nginx/files/public-keys/www.pub
+  checksum: 7afe100b9c7589d4243115891b2fbe3eb0124a19877266332cf06dded02c9d71
+  ignore_detectors: []
 scopeconfig: []
