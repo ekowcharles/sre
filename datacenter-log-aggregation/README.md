@@ -1,6 +1,26 @@
 # Log Aggregation
 
-# Stack
+## Design
+
+## Before you start
+
+1. Run the following in your favorite terminal to generate a key pair:
+   ```sh
+   ssh-keygen -m PEM -t rsa -b 4096
+   ```
+1. Place a copy of the **public key** in the path `datacenter-log-aggregation/provisioning/nginx/files/public_keys/www.pub`
+
+   > Do not check in private key into version control!
+
+## Usage
+
+### Testing NGINX Log Collection
+
+### Testing go Application Log Collection
+
+### Testing Java Application Log Collection
+
+## Stack
 
 1. [vagrant](https://learn.hashicorp.com/collections/vagrant/getting-started)
 1. [ansible](https://www.tutorialspoint.com/ansible/ansible_introduction.htm)
@@ -9,13 +29,6 @@
 1. [NGINX](https://www.netguru.com/codestories/nginx-tutorial-basics-concepts)
 1. [go](https://golang.org/doc/tutorial/getting-started)
 1. [java](https://www.dropwizard.io/en/latest/getting-started.html)
-
-
-## Generate key-pair
-
-```sh
-ssh-keygen -m PEM -t rsa -b 4096
-```
 
 ## References
 

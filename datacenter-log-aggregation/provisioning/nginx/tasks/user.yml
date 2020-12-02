@@ -24,7 +24,7 @@
 - name: Add public key for created user
   authorized_key:
     user: "{{ item.key }}"
-    key: "{{ lookup('file', './public-keys/{{ item.key }}.pub') }}"
+    key: "{{ lookup('file', './public_keys/{{ item.key }}.pub') }}"
     state: present
   with_dict: "{{ users }}"
 
