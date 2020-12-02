@@ -42,3 +42,4 @@
 1. [rsyslog Docs](https://rsyslog-mm.readthedocs.io/en/v7.4_stable/index.html)
 1. [nginx syslog Configuration](http://nginx.org/en/docs/syslog.html)
 1. [syslog Protocol RFC](https://tools.ietf.org/html/rfc3164#section-4.1.1)
+1. [syslog with go](https://golang.org/pkg/log/syslog/#example_Dial)
