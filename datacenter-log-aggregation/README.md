@@ -1,5 +1,15 @@
 # Log Aggregation
 
+# Stack
+
+1. vagrant
+1. ansible
+1. systemd
+1. rsyslog
+1. nginx
+1. go
+1. java
+
 
 ## Generate key-pair
 
