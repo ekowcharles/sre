@@ -2,6 +2,8 @@
 
 ## Design
 
+![Flow of logs](./docs/images/flow.png)
+
 ## Before you start
 
 1. Run the following in your favorite terminal to generate a key pair:
