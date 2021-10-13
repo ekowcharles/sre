@@ -17,3 +17,6 @@
 .vagrant
 *.box
 *.pub
+
+venv
+__pycache__
