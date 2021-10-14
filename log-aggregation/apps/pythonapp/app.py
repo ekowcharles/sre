@@ -19,7 +19,7 @@ def create_response_payload(status):
     """
 
     return json.dumps({
-        'status_code': status.value,
+        'code': status.value,
         'description': status.phrase
     })
 
@@ -43,7 +43,7 @@ def index():
     })
 
     return Response(
-        data, 
+        data,
         status=HTTPStatus.OK.value,
         mimetype='application/json'
     )
