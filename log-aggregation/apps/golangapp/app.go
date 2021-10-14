@@ -1,52 +1,63 @@
 package main
 
 import (
-  "encoding/json"
-  "fmt"
-  "io"
-  "log"
-  "net/http"
-  "os"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"math/rand"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
 )
 
-type Payload struct {
-  Code string `json:"code"`
-  Description string `json:"desciption"`
-}
+func buildResponse(c int) string {
+	r := Payload{strconv.Itoa(c), http.StatusText(c)}
+	JSON, _ := json.Marshal(r)
 
-type App struct {
-  Version string `json:"version"`
+	return string(JSON)
 }
 
 func main() {
-  defer fmt.Println("Exited!")
+	defer fmt.Println("Exited!")
 
-  port := getEnv("PORT", "8993")
-  version := App{ getEnv("APP_VERSION", "0.0.0") }
+	port := getEnv("PORT", "8040")
+	version := App{getEnv("APP_VERSION", "0.0.0")}
 
-  http.HandleFunc("/", func(w http.ResponseWriter, rq *http.Request) {
-    JSON, _ := json.Marshal(version)
+	rand.Seed(time.Now().UnixNano())
 
-    w.WriteHeader(http.StatusOK)
-    io.WriteString(w, string(JSON))
-  })
+	http.HandleFunc("/", func(w http.ResponseWriter, rq *http.Request) {
+		JSON, _ := json.Marshal(version)
 
-  http.HandleFunc("/exception", func(w http.ResponseWriter, rq *http.Request) {
-    w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusOK)
+		io.WriteString(w, string(JSON))
+	})
 
-    panic("Doing this only for the logs")
-  })
+	http.HandleFunc("/random", func(w http.ResponseWriter, rq *http.Request) {
+		i := rand.Intn(sl)
+		s := ss[i]
 
-  fmt.Printf("Listening on port %s ...\n", port)
+		w.WriteHeader(s)
+		io.WriteString(w, buildResponse(s))
+	})
 
-  log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+	http.HandleFunc("/exception", func(w http.ResponseWriter, rq *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+
+		panic("Doing this only for the logs")
+	})
+
+	fmt.Printf("Listening on port %s ...\n", port)
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func getEnv(key, fallback string) string {
-    value := os.Getenv(key)
-    if len(value) == 0 {
-        return fallback
-    }
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return fallback
+	}
 
-    return value
+	return value
 }
