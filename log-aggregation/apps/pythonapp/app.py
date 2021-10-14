@@ -20,8 +20,8 @@ app.url_map.add(Rule('/exception', endpoint='exception'))
 
 
 
-def create_response_payload(status):
-    """ Create response payload in app response format
+def build_response_payload(status):
+    """ Build response payload in app response format
     """
 
     return json.dumps({
@@ -29,12 +29,12 @@ def create_response_payload(status):
         'description': status.phrase
     })
 
-def create_response(status):
-    """ Create response
+def build_response(status):
+    """ Build response
     """
 
     return Response(
-            create_response_payload(status),
+            build_response_payload(status),
             status=status.value,
             mimetype='application/json'
         )
@@ -64,7 +64,7 @@ def randomize():
     code = HTTP_STATUS_CODES[ind]
     status = HTTPStatus(code)
 
-    return create_response(status)
+    return build_response(status)
 
 @app.endpoint('http_code')
 def http_code(code=HTTPStatus.OK.value):
@@ -78,7 +78,7 @@ def http_code(code=HTTPStatus.OK.value):
     except ValueError as error:
         print(error)
 
-    return create_response(status)
+    return build_response(status)
 
 @app.endpoint('exception')
 def exception():
