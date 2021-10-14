@@ -3,7 +3,7 @@ import os
 import random
 from http import HTTPStatus
 
-from flask import Flask, Response
+from flask import Flask, Response, escape
 
 HTTP_STATUS_CODES = list(map(lambda x: x.value, HTTPStatus))
 HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
@@ -68,12 +68,11 @@ def http_code(code=HTTPStatus.OK.value):
     status = HTTPStatus.BAD_REQUEST
 
     try:
-        status = HTTPStatus(int(code))
+        status = HTTPStatus(int(escape(code)))
     except ValueError as error:
         print(error)
 
     return create_response(status)
-    
 
 @app.route("/exception")
 def exception():
