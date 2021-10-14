@@ -8,15 +8,17 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 )
 
-func buildResponse(c int) string {
+func buildResponse(w http.ResponseWriter, c int) {
 	r := Payload{strconv.Itoa(c), http.StatusText(c)}
 	JSON, _ := json.Marshal(r)
 
-	return string(JSON)
+	w.WriteHeader(c)
+	io.WriteString(w, string(JSON))
 }
 
 func main() {
@@ -34,12 +36,30 @@ func main() {
 		io.WriteString(w, string(JSON))
 	})
 
+	http.HandleFunc("/http/", func(w http.ResponseWriter, rq *http.Request) {
+		exp := regexp.MustCompile(`/http/(?P<id>\b[0-9]{3}$)`)
+		match := exp.FindStringSubmatch(rq.URL.Path)
+
+		if len(match) != 2 {
+			buildResponse(w, http.StatusBadRequest)
+
+			return
+		}
+
+		c, err := strconv.Atoi(match[1])
+		if err != nil || http.StatusText(c) == "" {
+			buildResponse(w, http.StatusBadRequest)
+
+			return
+		}
+
+		buildResponse(w, c)
+	})
+
 	http.HandleFunc("/random", func(w http.ResponseWriter, rq *http.Request) {
 		i := rand.Intn(sl)
-		s := ss[i]
 
-		w.WriteHeader(s)
-		io.WriteString(w, buildResponse(s))
+		buildResponse(w, ss[i])
 	})
 
 	http.HandleFunc("/exception", func(w http.ResponseWriter, rq *http.Request) {
