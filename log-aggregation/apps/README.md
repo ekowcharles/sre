@@ -7,6 +7,6 @@
 |/|Return HTTP 200 with application version.<br><br>e.g. `{"version": "0.1.0"}`|
 |/http/<http_status_code>|Return the HTTP status code designated by `<http_status_code>`. Returns HTTP 400 - Bad Request when `<http_status_code>` is invalid.<br><br>e.g. `/http/503` returns HTTP 503 with payload `{"code": 503, "description": "Service Unavailable"}`|
 | /random|Return the HTTP status code designated by `<http_status_code>`.<br><br>e.g. `/http/503` returns HTTP 503 with payload `{"code": 503, "description": "Service Unavailable"}`<br><br> e.g. `/http/foobar` returns HTTP 400 with payload `{"code": 400, "description": "Bad Request"}`|
-|/exception|Raises an unhandled exception. Returns HTTP 503 - Internal Server Error along with web server specific payload.|
+|/exception|Raises an unhandled exception. May HTTP 503 - Internal Server Error along with web server specific payload.|
 
 All endpoints are HTTP method agnostic

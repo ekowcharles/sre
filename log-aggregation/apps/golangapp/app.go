@@ -31,6 +31,12 @@ func main() {
     io.WriteString(w, string(JSON))
   })
 
+  http.HandleFunc("/exception", func(w http.ResponseWriter, rq *http.Request) {
+    w.WriteHeader(http.StatusInternalServerError)
+
+    panic("Doing this only for the logs")
+  })
+
   fmt.Printf("Listening on port %s ...\n", port)
 
   log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
