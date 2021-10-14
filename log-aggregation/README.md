@@ -4,7 +4,7 @@
 
 ![Flow of logs](./docs/images/flow.png)
 
-## Before you start
+## Getting Started
 
 ## Usage
 
