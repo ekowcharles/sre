@@ -1,0 +1,14 @@
+version: ${DW_VERSION:-0.1.0}
+
+server:
+  applicationConnectors:
+  - type: http 
+    port: ${DW_PORT}
+  adminConnectors:
+  - type: http
+    port: ${DW_ADMIN_PORT:-8051}
+
+logging:
+  level: INFO
+  loggers:
+    com.log: DEBUG
