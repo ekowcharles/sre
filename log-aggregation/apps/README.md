@@ -10,3 +10,7 @@
 |/exception|Raises an unhandled exception. May HTTP 503 - Internal Server Error along with web server specific payload.|
 
 All endpoints are HTTP method agnostic
+
+## References
+
+1. HTTP response codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
