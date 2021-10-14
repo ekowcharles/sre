@@ -4,6 +4,7 @@ import random
 from http import HTTPStatus
 
 from flask import Flask, Response, escape
+from werkzeug.routing import Rule
 
 HTTP_STATUS_CODES = list(map(lambda x: x.value, HTTPStatus))
 HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
@@ -12,6 +13,11 @@ APP_VERSION = os.environ.get('APP_VERSION')
 
 
 app = Flask(__name__)
+app.url_map.add(Rule('/', endpoint='index'))
+app.url_map.add(Rule('/http/<code>', endpoint='http_code'))
+app.url_map.add(Rule('/random', endpoint='random'))
+app.url_map.add(Rule('/exception', endpoint='exception'))
+
 
 
 def create_response_payload(status):
@@ -33,7 +39,7 @@ def create_response(status):
             mimetype='application/json'
         )
 
-@app.route("/")
+@app.endpoint('index')
 def index():
     """ Return app version
     """
@@ -48,7 +54,7 @@ def index():
         mimetype='application/json'
     )
 
-@app.route("/random")
+@app.endpoint('random')
 def randomize():
     """ Return with a random HTTP response code. Include HTTP status code
         description in response
@@ -60,7 +66,7 @@ def randomize():
 
     return create_response(status)
 
-@app.route("/http/<code>")
+@app.endpoint('http_code')
 def http_code(code=HTTPStatus.OK.value):
     """ Return with provided HTTP response code. Return HTTP 400 - Bad request
         if code provided is invalid
@@ -74,7 +80,7 @@ def http_code(code=HTTPStatus.OK.value):
 
     return create_response(status)
 
-@app.route("/exception")
+@app.endpoint('exception')
 def exception():
     """ Raise exception
     """
