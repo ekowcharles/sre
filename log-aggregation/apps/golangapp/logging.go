@@ -35,22 +35,31 @@ var (
 	fn   = fmt.Sprintf("golangapp-%d.log", time.Now().UnixNano())
 	f, _ = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
 
-	logger   = log.New(f, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
-	_blogger = log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
+	lg     = log.New(f, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
+	_lgout = log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
+	_lgerr = log.New(os.Stderr, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
 
 	logf = func(lt LogType, m string, v ...interface{}) {
 		ms := lt.String() + m
 
-		logger.Printf(ms, v...)
+		lg.Printf(ms, v...)
 
-		_blogger.Printf(ms, v...)
+		if lt != Error {
+			_lgout.Printf(ms, v...)
+		} else {
+			_lgerr.Printf(ms, v...)
+		}
 	}
 
 	logln = func(lt LogType, m string) {
 		ms := lt.String() + m
 
-		logger.Println(ms)
+		lg.Println(ms)
 
-		_blogger.Println(ms)
+		if lt != Error {
+			_lgout.Println(ms)
+		} else {
+			_lgerr.Println(ms)
+		}
 	}
 )
