@@ -22,7 +22,7 @@ func buildResponse(w http.ResponseWriter, c int) {
 }
 
 func main() {
-	defer fmt.Println("Exited!")
+	defer logln(Debug, "Exited!")
 
 	port := getEnv("PORT", "8040")
 	version := App{getEnv("APP_VERSION", "0.0.0")}
@@ -68,7 +68,8 @@ func main() {
 		panic("Doing this only for the logs")
 	})
 
-	fmt.Printf("Listening on port %s ...\n", port)
+	logf(Debug, "Listening on port :%s", port)
+	fmt.Print(&buf)
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
