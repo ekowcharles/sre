@@ -69,7 +69,6 @@ func main() {
 	})
 
 	logf(Debug, "Listening on port :%s", port)
-	fmt.Print(&buf)
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
