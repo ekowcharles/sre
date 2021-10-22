@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -33,13 +32,11 @@ func (lt LogType) String() string {
 }
 
 var (
-	buf bytes.Buffer
-
 	fn   = fmt.Sprintf("golangapp-%d.log", time.Now().UnixNano())
 	f, _ = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
 
 	logger   = log.New(f, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
-	_blogger = log.New(&buf, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
+	_blogger = log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
 
 	logf = func(lt LogType, m string, v ...interface{}) {
 		ms := lt.String() + m
@@ -47,7 +44,6 @@ var (
 		logger.Printf(ms, v...)
 
 		_blogger.Printf(ms, v...)
-		fmt.Print(&buf)
 	}
 
 	logln = func(lt LogType, m string) {
@@ -56,6 +52,5 @@ var (
 		logger.Println(ms)
 
 		_blogger.Println(ms)
-		fmt.Print(&buf)
 	}
 )

@@ -2,24 +2,24 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func logRequest(w *http.ResponseWriter, r *http.Request) {
-	if r.Method == "OPTIONS" {
-		return
-	}
-
-	logf(Debug, "%s %s %s \n", r.Method, r.URL, r.Proto)
+	var sb strings.Builder
 	for k, v := range r.Header {
-		logf(Debug, "%q: %q\n", k, v)
+		if k == "Authorization" || k == "Proxy-Authorization" {
+			sb.WriteString(fmt.Sprintf(" %q: [*****]", k))
+		} else {
+			sb.WriteString(fmt.Sprintf(" %q: %q", k, v))
+		}
 	}
 
-	logf(Debug, "Host = %q\n", r.Host)
-	logf(Debug, "RemoteAddr = %q\n", r.RemoteAddr)
-	logf(Debug, "Accept = %q", r.Header["Accept"])
+	logf(Debug, "%s %s %s %s %s%s", r.Method, r.URL, r.Proto, r.Host, r.RemoteAddr, sb.String())
 }
 
 func setHeaders(w *http.ResponseWriter, req *http.Request, url string) {
