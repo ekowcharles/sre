@@ -1,6 +1,7 @@
 package com.log.aggregation;
 
 import com.log.aggregation.resources.HttpServerResource;
+import com.log.aggregation.health.AppHealthCheck;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -21,21 +22,13 @@ public class JavaApplication extends Application<JavaConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<JavaConfiguration> bootstrap) {
-        bootstrap.setConfigurationSourceProvider(
-            new SubstitutingSourceProvider(
-                bootstrap.getConfigurationSourceProvider(),
-                new EnvironmentVariableSubstitutor(false)
-            )
-        );
+        bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+                bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
     }
 
     @Override
-    public void run(final JavaConfiguration configuration,
-                    final Environment environment) {
-        final HttpServerResource resource = new HttpServerResource(
-            configuration.getVersion()
-        );
-
-        environment.jersey().register(resource);
+    public void run(final JavaConfiguration configuration, final Environment environment) {
+        environment.healthChecks().register("template", new AppHealthCheck());
+        environment.jersey().register(new HttpServerResource(configuration.getVersion()));
     }
 }
