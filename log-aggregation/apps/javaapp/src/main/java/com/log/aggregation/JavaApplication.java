@@ -1,6 +1,6 @@
 package com.log.aggregation;
 
-import com.log.aggregation.resources.HttpServerResource;
+import com.log.aggregation.resources.HttpResource;
 import com.log.aggregation.health.AppHealthCheck;
 
 import io.dropwizard.Application;
@@ -28,7 +28,7 @@ public class JavaApplication extends Application<JavaConfiguration> {
 
     @Override
     public void run(final JavaConfiguration configuration, final Environment environment) {
-        environment.healthChecks().register("template", new AppHealthCheck());
-        environment.jersey().register(new HttpServerResource(configuration.getVersion()));
+        environment.healthChecks().register("apphealth", new AppHealthCheck());
+        environment.jersey().register(new HttpResource(configuration.getVersion()));
     }
 }
