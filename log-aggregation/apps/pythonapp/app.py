@@ -1,14 +1,17 @@
+import json
 import logging
 import logging.config
 import os
+import random
+import traceback
 from http import HTTPStatus
 from logging import config
-import json
-import random
 
 import yaml
-from flask import Flask, escape, Response
-from werkzeug.routing import Rule
+from flask import Response, escape, request
+
+from . import create_app
+from .util import build_response
 
 HTTP_STATUS_CODES = list(map(lambda x: x.value, HTTPStatus))
 HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
@@ -19,13 +22,8 @@ with open('./logging.yaml', 'rt') as file:
     config = yaml.safe_load(file.read())
     logging.config.dictConfig(config)
 
-app = Flask(__name__)
-app.debug = True
+app = create_app()
 
-app.url_map.add(Rule('/', endpoint='index'))
-app.url_map.add(Rule('/http/<code>', endpoint='http_code'))
-app.url_map.add(Rule('/random', endpoint='random'))
-app.url_map.add(Rule('/exception', endpoint='exception'))
 
 @app.endpoint('index')
 def index():
@@ -42,6 +40,7 @@ def index():
         mimetype='application/json'
     )
 
+
 @app.endpoint('random')
 def randomize():
     """ Return with a random HTTP response code. Include HTTP status code
@@ -50,16 +49,13 @@ def randomize():
 
     app.logger.debug('Retrieving random http response ...')
     ind = random.randint(0, HTTP_STATUS_CODES_COUNT)
-    status = HTTPStatus.INTERNAL_SERVER_ERROR
 
-    try:
-        # trying to access the last position throws IndexError error which is OK
-        code = HTTP_STATUS_CODES[ind]
-        status = HTTPStatus(code)
-    except IndexError as err:
-        app.logger.error(err)
+    # trying to access the last position throws IndexError error which is OK
+    code = HTTP_STATUS_CODES[ind]
+    status = HTTPStatus(code)
 
     return build_response(status)
+
 
 @app.endpoint('http_code')
 def http_code(code=HTTPStatus.OK.value):
@@ -76,6 +72,7 @@ def http_code(code=HTTPStatus.OK.value):
 
     return build_response(status)
 
+
 @app.endpoint('exception')
 def exception():
     """ Raise exception
@@ -83,22 +80,23 @@ def exception():
 
     raise Exception('Doing this only for the logs')
 
-def build_response_payload(status):
-    """ Build response payload in app response format
-    """
-    app.logger.debug('Building response payload ...')
 
-    return json.dumps({
-        'code': status.value,
-        'description': status.phrase
-    })
+@app.before_first_request
+def before_first_request_func():
+    app.logger.info('pythonapp.first')
 
-def build_response(status):
-    """ Build response
-    """
 
-    return Response(
-            build_response_payload(status),
-            status=status.value,
-            mimetype='application/json'
-        )
+@app.before_request
+def before_request():
+    app.logger.info('%s %s%s %s %s %s', request.method,
+                    request.full_path,
+                    request.query_string.decode("utf-8"),
+                    request.scheme,
+                    request.host,
+                    request.remote_addr)
+
+
+@app.errorhandler(Exception)
+def exceptions(error):
+    app.logger.error('%s \n%s', error, traceback.format_exc())
+    return build_response(HTTPStatus.INTERNAL_SERVER_ERROR)
