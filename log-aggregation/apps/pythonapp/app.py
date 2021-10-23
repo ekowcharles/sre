@@ -6,6 +6,7 @@ import random
 import traceback
 from http import HTTPStatus
 from logging import config
+from werkzeug.wrappers import response
 
 import yaml
 from flask import Response, escape, request
@@ -86,14 +87,17 @@ def before_first_request_func():
     app.logger.info('pythonapp.first')
 
 
-@app.before_request
-def before_request():
-    app.logger.info('%s %s%s %s %s %s', request.method,
+@app.after_request
+def after_request(response):
+    app.logger.info('%s %s%s %s %s %s %s', request.method,
                     request.full_path,
                     request.query_string.decode("utf-8"),
                     request.scheme,
+                    response.status_code,
                     request.host,
                     request.remote_addr)
+
+    return response
 
 
 @app.errorhandler(Exception)
