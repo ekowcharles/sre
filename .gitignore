@@ -26,4 +26,4 @@ log-aggregation/apps/javaapp/.*
 
 target
 *.jar
-*.log
+*.log*

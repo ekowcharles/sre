@@ -1,0 +1,45 @@
+version: 1
+disable_existing_loggers: true
+
+formatters:
+  default:
+    format: "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
+  error:
+    format: "%(levelname)s <PID %(process)d:%(processName)s> %(name)s.%(funcName)s(): %(message)s"
+
+handlers:
+  console_handler:
+    class: logging.StreamHandler
+    level: DEBUG
+    stream: ext://sys.stdout
+    formatter: default
+  debug_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    filename: pythonapp.log
+    maxBytes: 1024
+    backupCount: 3
+    formatter: default
+  info_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    filename: pythonapp.log
+    maxBytes: 1024
+    backupCount: 3
+    formatter: default
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    filename: pythonapp.error.log
+    maxBytes: 1024
+    backupCount: 3
+    formatter: error
+
+root:
+  level: DEBUG
+  handlers:
+    - console_handler
+    - debug_file_handler
+    - info_file_handler
+    - error_file_handler
+  propogate: yes

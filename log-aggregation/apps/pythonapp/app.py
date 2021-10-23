@@ -1,9 +1,13 @@
-import json
+import logging
+import logging.config
 import os
-import random
 from http import HTTPStatus
+from logging import config
+import json
+import random
 
-from flask import Flask, Response, escape
+import yaml
+from flask import Flask, escape, Response
 from werkzeug.routing import Rule
 
 HTTP_STATUS_CODES = list(map(lambda x: x.value, HTTPStatus))
@@ -11,33 +15,17 @@ HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
 
 APP_VERSION = os.environ.get('APP_VERSION')
 
+with open('./logging.yaml', 'rt') as file:
+    config = yaml.safe_load(file.read())
+    logging.config.dictConfig(config)
 
 app = Flask(__name__)
+app.debug = True
+
 app.url_map.add(Rule('/', endpoint='index'))
 app.url_map.add(Rule('/http/<code>', endpoint='http_code'))
 app.url_map.add(Rule('/random', endpoint='random'))
 app.url_map.add(Rule('/exception', endpoint='exception'))
-
-
-
-def build_response_payload(status):
-    """ Build response payload in app response format
-    """
-
-    return json.dumps({
-        'code': status.value,
-        'description': status.phrase
-    })
-
-def build_response(status):
-    """ Build response
-    """
-
-    return Response(
-            build_response_payload(status),
-            status=status.value,
-            mimetype='application/json'
-        )
 
 @app.endpoint('index')
 def index():
@@ -60,9 +48,16 @@ def randomize():
         description in response
     """
 
+    app.logger.debug('Retrieving random http response ...')
     ind = random.randint(0, HTTP_STATUS_CODES_COUNT)
-    code = HTTP_STATUS_CODES[ind]
-    status = HTTPStatus(code)
+    status = HTTPStatus.INTERNAL_SERVER_ERROR
+
+    try:
+        # trying to access the last position throws IndexError error which is OK
+        code = HTTP_STATUS_CODES[ind]
+        status = HTTPStatus(code)
+    except IndexError as err:
+        app.logger.error(err)
 
     return build_response(status)
 
@@ -74,9 +69,10 @@ def http_code(code=HTTPStatus.OK.value):
     status = HTTPStatus.BAD_REQUEST
 
     try:
+        app.logger.info('Fetching status for %s ...', code)
         status = HTTPStatus(int(escape(code)))
     except ValueError as error:
-        print(error)
+        app.logger.error(error)
 
     return build_response(status)
 
@@ -86,3 +82,23 @@ def exception():
     """
 
     raise Exception('Doing this only for the logs')
+
+def build_response_payload(status):
+    """ Build response payload in app response format
+    """
+    app.logger.debug('Building response payload ...')
+
+    return json.dumps({
+        'code': status.value,
+        'description': status.phrase
+    })
+
+def build_response(status):
+    """ Build response
+    """
+
+    return Response(
+            build_response_payload(status),
+            status=status.value,
+            mimetype='application/json'
+        )
