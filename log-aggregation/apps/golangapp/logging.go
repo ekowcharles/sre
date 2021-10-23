@@ -32,7 +32,7 @@ func (lt LogType) String() string {
 }
 
 var (
-	fn   = fmt.Sprintf("golangapp-%d.log", time.Now().UnixNano())
+	fn   = fmt.Sprintf("./logs/golangapp-%d.log", time.Now().UnixNano())
 	f, _ = os.OpenFile(fn, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
 
 	lg     = log.New(f, "", log.LstdFlags|log.Lmicroseconds|log.LUTC|log.Lmsgprefix)
