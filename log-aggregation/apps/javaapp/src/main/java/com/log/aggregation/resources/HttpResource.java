@@ -13,11 +13,13 @@ import com.codahale.metrics.annotation.ResponseMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.log.aggregation.api.Application;
 import com.log.aggregation.api.Payload;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 public class HttpResource {
-    private Application application;
+    private final Application application;
+    private final int STATUS_CODES_LENGTH = Status.values().length;
 
     public HttpResource(String version) {
         this.application = new Application(version);
@@ -26,8 +28,11 @@ public class HttpResource {
     @GET
     @Timed
     @ResponseMetered
-    public Application index() {
-        return application;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response index() {
+        return Response.status(Status.OK)
+                       .entity(application)
+                       .build();
     }
 
     @GET
@@ -35,8 +40,15 @@ public class HttpResource {
     @Path("/random")
     @ResponseMetered
     @Produces(MediaType.APPLICATION_JSON)
-    public Payload random() {
-        return new Payload(Status.OK.getStatusCode(), "description");
+    public Response random() {
+        int codeIndex = ThreadLocalRandom.current().nextInt(0, STATUS_CODES_LENGTH + 1);
+        Status status =  Status.values()[codeIndex];
+
+        Payload payload = new Payload(status);
+
+        return Response.status(status)
+                       .entity(payload)
+                       .build();
     }
 
     @GET
@@ -44,7 +56,7 @@ public class HttpResource {
     @Path("/exception")
     @Produces(MediaType.APPLICATION_JSON)
     @ExceptionMetered()
-    public Payload exception() throws Exception {
+    public Response exception() throws Exception {
         throw new Exception("Doing this only for the logs");
     }
 
@@ -61,7 +73,6 @@ public class HttpResource {
         Payload payload = new Payload(status);
 
         return Response.status(status)
-                       .type(MediaType.APPLICATION_JSON_TYPE)
                        .entity(payload)
                        .build();
     }
