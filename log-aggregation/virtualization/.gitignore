@@ -9,3 +9,6 @@ shared/*
 
 public_keys/*
 !public_keys/.keep
+
+provisioning/apps/files
+!provisioning/apps/files/.keep
