@@ -9,3 +9,7 @@ run:
 	LOAD_BALANCER_URL=http://localhost:80/ \
 	PORT=8040 \
 		./golangapp
+
+package:
+	rm golangapp
+	GO111MODULE=auto GOOS=linux GOARCH=arm64 go build
