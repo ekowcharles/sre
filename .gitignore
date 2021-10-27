@@ -15,8 +15,6 @@
 # vendor/
 .DS_Store
 .vagrant
-*.box
-*.pub
 
 venv
 __pycache__

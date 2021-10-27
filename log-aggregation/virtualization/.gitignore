@@ -1,2 +1,11 @@
-shared
 .vagrant
+
+shared/*
+!shared/.keep
+
+*.box
+*.pub
+*.rsa
+
+public_keys/*
+!public_keys/.keep

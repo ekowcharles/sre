@@ -1,6 +1,6 @@
 user       www www;  ## Default: nobody
 worker_processes  5;  ## Default: 1
-error_log {{ nginx_error_log_file }};
+error_log {{ nginx_log_dir }}/error.log;
 pid        /run/nginx.pid;
 
 worker_rlimit_nofile 8192;
@@ -13,7 +13,7 @@ http {
   log_format   main '$remote_addr - $remote_user [$time_local]  $status '
     '"$request" $body_bytes_sent "$http_referer" '
     '"$http_user_agent" "$http_x_forwarded_for"';
-  access_log   {{ nginx_error_access_file }};
+  access_log   {{ nginx_log_dir }}/access.log;
   keepalive_timeout  65;
   sendfile     off;
   tcp_nopush   on;
@@ -29,7 +29,7 @@ http {
     listen          80;
 
     server_name     logger.app.com;
-    access_log      {{ nginx_error_access_file }};
+    access_log      {{ nginx_log_dir }}/access.log;
 
     location / {
       proxy_set_header Host      $host;

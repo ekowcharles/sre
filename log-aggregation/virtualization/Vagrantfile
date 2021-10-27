@@ -52,8 +52,7 @@ Vagrant.configure("2") do |config|
 
       ansible.host_vars = {
         "app" => { 
-          "nginx_error_log_file" => "/var/log/nginx/error.log",
-          "nginx_access_log_file" => "/var/log/nginx/accesss.log",
+          "nginx_log_dir" => "/var/log/nginx",
           "app_server_host" => app_server_host,
           "app_server_port" => app_server_port
         }
