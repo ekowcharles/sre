@@ -44,10 +44,8 @@ public class HttpResource {
         int codeIndex = ThreadLocalRandom.current().nextInt(0, STATUS_CODES_LENGTH + 1);
         Status status =  Status.values()[codeIndex];
 
-        Payload payload = new Payload(status);
-
         return Response.status(status)
-                       .entity(payload)
+                       .entity(new Payload(status))
                        .build();
     }
 
@@ -70,10 +68,8 @@ public class HttpResource {
             status = Status.fromStatusCode(Status.BAD_REQUEST.getStatusCode());
         }
 
-        Payload payload = new Payload(status);
-
         return Response.status(status)
-                       .entity(payload)
+                       .entity(new Payload(status))
                        .build();
     }
 }
