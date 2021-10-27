@@ -39,3 +39,5 @@ The location of the logs that are being aggregated are as follows:
 1. [systemd.service Synopsis](https://www.freedesktop.org/software/systemd/man/systemd.service.html#)
 1. [systemd.exec Synopsis](https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
 1. [auditd Configuration](https://linux.die.net/man/5/auditd.conf)
+1. [Ansible Loops](https://docs.ansible.com/ansible/2.5/user_guide/playbooks_loops.html)
+1. [Ansbile Playbook Loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)

@@ -1,15 +1,4 @@
 ---
-- name: Update all packages to their latest version
-  apt:
-    name: "*"
-    state: latest
-
-- name: Update cache
-  apt:
-    update_cache: yes
-    autoclean: yes
-    autoremove: yes
-
-- name: Install packages
-  apt:
-    name: "{{ packages }}"
+- name: Setup applications
+  import_tasks: apps.yml
+  loop: "{{ apps|dict2items }}"

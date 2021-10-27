@@ -1,0 +1,12 @@
+[Unit]
+Description=javaapp running on port 8050
+
+[Service]
+Type=simple
+Environment="DW_PORT=8050"
+Environment="DW_VERSION=0.1.0"
+ExecStart=java -jar target/javapp-1.0-SNAPSHOT.jar server {{ apps_dir }}/javaapp/config.yml
+ExecStop=/usr/bin/kill $(lsof -i tcp:8050 -t)
+
+[Install]
+WantedBy=multi-user.target

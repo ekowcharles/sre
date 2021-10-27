@@ -1,0 +1,26 @@
+---
+- name: Create {{ item.key }} workspace
+  file:
+    path: "{{ apps_dir }}/{{ item.key }}"
+    state: directory
+  register: workspace
+
+- name: Move application file(s)
+  file:
+    src: "{{ item }}"
+    dest: "{{ workspace.path }}/{{item}}"
+    owner: "www"
+    group: "www"
+  loop: "{{ item.value.artifacts }}"
+
+- name: Move {{ item.key }} service configuration
+  template:
+    src: "{{ item.key }}.service.j2"
+    dest: /etc/systemd/system/{{ item.key }}.service
+
+- name: Start app service
+  systemd:
+    name: "{{ item.key }}"
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
