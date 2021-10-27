@@ -10,5 +10,16 @@ server:
 
 logging:
   level: INFO
-  loggers:
-    com.log: DEBUG
+  appenders:
+    - type: file
+      currentLogFilename: "${DW_LOG_DIR:-./logs}/javaapp.log"
+      archive: true
+      archivedLogFilenamePattern: "${DW_LOG_DIR:-./logs}/javaapp-%d.log.gz"
+      archivedFileCount: 5
+      timeZone: UTC
+      bufferSize: 8KiB
+      immediateFlush: true
+    - type: console
+      threshold: DEBUG
+      target: stdout
+      timeZone: UTC

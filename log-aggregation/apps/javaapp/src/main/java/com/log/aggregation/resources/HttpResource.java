@@ -41,6 +41,7 @@ public class HttpResource {
     @ResponseMetered
     @Produces(MediaType.APPLICATION_JSON)
     public Response random() {
+        // May throw a ArrayIndexOutOfBoundsException exception and that is OK
         int codeIndex = ThreadLocalRandom.current().nextInt(0, STATUS_CODES_LENGTH + 1);
         Status status =  Status.values()[codeIndex];
 

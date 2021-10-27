@@ -23,7 +23,7 @@ public class JavaApplication extends Application<JavaConfiguration> {
     @Override
     public void initialize(final Bootstrap<JavaConfiguration> bootstrap) {
         bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
-                bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
+            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
     }
 
     @Override
