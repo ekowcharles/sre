@@ -4,7 +4,7 @@ import "os"
 
 type Payload struct {
 	Code        string `json:"code"`
-	Description string `json:"description"`
+	Description string `json:"message"`
 }
 
 type AppSetting struct {
