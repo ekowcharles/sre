@@ -1,12 +1,6 @@
 package com.log.aggregation.resources;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.HEAD;
-import javax.ws.rs.POST;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,9 +8,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.codahale.metrics.annotation.Timed;
-import com.codahale.metrics.annotation.ResponseMetered;
 import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.ResponseMetered;
+import com.codahale.metrics.annotation.Timed;
 import com.log.aggregation.api.Application;
 import com.log.aggregation.api.Payload;
 
@@ -42,9 +36,7 @@ public class HttpResource {
     @ResponseMetered
     @Produces(MediaType.APPLICATION_JSON)
     public Payload random() {
-
-        
-        // return new Payload(200, "description");
+        return new Payload(Status.OK.getStatusCode(), "description");
     }
 
     @GET
@@ -61,9 +53,16 @@ public class HttpResource {
     @Path("/http/{code}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response http_code(@PathParam("code") int code) {
-        Status status = Status.fromStatusCode(code);
+        Status status =  Status.fromStatusCode(code);
+        if (status == null) {
+            status = Status.fromStatusCode(Status.BAD_REQUEST.getStatusCode());
+        }
 
-        return Response.status(status).type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new Payload(status.getStatusCode(), status.getReasonPhrase())).build();
+        Payload payload = new Payload(status);
+
+        return Response.status(status)
+                       .type(MediaType.APPLICATION_JSON_TYPE)
+                       .entity(payload)
+                       .build();
     }
 }

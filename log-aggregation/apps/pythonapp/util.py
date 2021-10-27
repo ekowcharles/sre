@@ -6,7 +6,7 @@ def build_response_payload(status):
     """
     return json.dumps({
         'code': status.value,
-        'description': status.phrase
+        'message': status.phrase
     })
 
 

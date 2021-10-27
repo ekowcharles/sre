@@ -3,8 +3,8 @@ package main
 import "os"
 
 type Payload struct {
-	Code        string `json:"code"`
-	Description string `json:"message"`
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
 type AppSetting struct {
