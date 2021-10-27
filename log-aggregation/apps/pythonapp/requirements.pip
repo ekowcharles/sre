@@ -1,2 +1,2 @@
 Flask==2.0.2
-PyYAML==6.0
+pyaml-env==1.1.1

@@ -1,3 +1,5 @@
+SHELL = /bin/bash
+
 default: run
 
 install:

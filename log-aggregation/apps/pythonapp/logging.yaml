@@ -16,35 +16,35 @@ handlers:
   debug_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
-    filename: ./logs/pythonapp.debug.log
+    filename: !ENV ${LOG_DIR:./logs}/pythonapp.debug.log
     maxBytes: 1024
     backupCount: 3
     formatter: default
   info_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: INFO
-    filename: ./logs/pythonapp.log
+    filename: !ENV ${LOG_DIR:./logs}/pythonapp.log
     maxBytes: 1024
     backupCount: 3
     formatter: default
   warn_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: WARN
-    filename: ./logs/pythonapp.warn.log
+    filename: !ENV ${LOG_DIR:./logs}/pythonapp.warn.log
     maxBytes: 1024
     backupCount: 3
     formatter: default
   critical_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: CRITICAL
-    filename: ./logs/pythonapp.critical.log
+    filename: !ENV ${LOG_DIR:./logs}/pythonapp.critical.log
     maxBytes: 1024
     backupCount: 3
     formatter: error
   error_file_handler:
     class: logging.handlers.RotatingFileHandler
     level: ERROR
-    filename: ./logs/pythonapp.error.log
+    filename: !ENV ${LOG_DIR:./logs}/pythonapp.error.log
     maxBytes: 1024
     backupCount: 3
     formatter: error

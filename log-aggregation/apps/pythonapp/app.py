@@ -6,10 +6,9 @@ import random
 import traceback
 from http import HTTPStatus
 from logging import config
-from werkzeug.wrappers import response
 
-import yaml
 from flask import Response, escape, request
+from pyaml_env import parse_config
 
 from . import create_app
 from .util import build_response
@@ -19,9 +18,8 @@ HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
 
 APP_VERSION = os.environ.get('APP_VERSION')
 
-with open('./logging.yaml', 'rt') as file:
-    config = yaml.safe_load(file.read())
-    logging.config.dictConfig(config)
+config = parse_config('./logging.yaml')
+logging.config.dictConfig(config)
 
 app = create_app()
 
