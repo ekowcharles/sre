@@ -1,0 +1,63 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.network "public_network"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "256"
+  end
+
+  config.vm.synced_folder './shared', '/var/log', SharedFoldersEnableSymlinksCreate: false
+
+  config.vm.define "base" do |base|
+    base.vm.box = "hashicorp/bionic64"
+    base.vm.hostname = "base"
+
+    base.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "base"]
+    end
+
+    base.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "base" => ["base"]
+      }
+    end
+  end
+
+  app_server_host = "192.168.33.10"
+  app_server_port = 514
+  config.vm.define "app" do |app|
+    app.vm.box = "base.box"
+    app.vm.hostname = "app"
+
+    app.vm.network :private_network, ip: app_server_host
+
+    app.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--name", "app"]
+    end
+
+    app.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provisioning/playbook.yml"
+
+      ansible.groups = {
+        "appserver" => ["app"]
+      }
+
+      ansible.host_vars = {
+        "app" => { 
+          "nginx_error_log_file" => "/var/log/nginx/error.log",
+          "nginx_access_log_file" => "/var/log/nginx/accesss.log",
+          "app_server_host" => app_server_host,
+          "app_server_port" => app_server_port
+        }
+      }
+    end
+  end
+end
