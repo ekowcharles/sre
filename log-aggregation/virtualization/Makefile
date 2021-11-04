@@ -9,7 +9,7 @@ prepare:
 							cp pythonapp.zip ../../virtualization/provisioning/apps/files
 	cd ../apps/javaapp && $(MAKE) package && \
 						  cp target/javapp-1.0-SNAPSHOT.jar ../../virtualization/provisioning/apps/files && \
-						  cp config.yaml ../../virtualization/provisioning/apps/files
+						  cp config.yml ../../virtualization/provisioning/apps/files
 
 all:
 	$(MAKE) prepare

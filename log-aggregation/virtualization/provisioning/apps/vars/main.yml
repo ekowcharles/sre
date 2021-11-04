@@ -4,7 +4,7 @@ apps:
   javaapp:
     artifacts:
       - javapp-1.0-SNAPSHOT.jar
-      - config.yaml
+      - config.yml
   pythonapp:
     artifacts:
       - pythonapp.zip

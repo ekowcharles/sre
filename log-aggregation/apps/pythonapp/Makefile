@@ -14,5 +14,5 @@ run:
 		flask run --host=0.0.0.0 --port 8030
 
 package:
-	rm pythonapp.zip
+	rm -f pythonapp.zip
 	zip -vr pythonapp.zip ./ -x "*.DS_Store*" "*.zip*" "*__pycache__*" "*venv*"
