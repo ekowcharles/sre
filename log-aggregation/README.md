@@ -6,6 +6,11 @@
 
 ## Getting Started
 
+### Installations
+
+1. [golang](https://golang.org/doc/install)
+1. [mvn](https://maven.apache.org/install.html)
+
 ## Usage
 
 ## Stack
