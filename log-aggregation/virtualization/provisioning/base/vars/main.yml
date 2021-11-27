@@ -1,4 +1,13 @@
 ---
 packages:
-  - auditd
-  - audispd-plugins
+  - default-jre
+  - tree
+  - software-properties-common
+  - python3.8
+  - python3-pip
+
+users:
+  www:
+    comment: nginx user
+    uid: 3090
+    group: "www"

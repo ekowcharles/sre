@@ -2,59 +2,55 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.network "public_network"
+  config.vm.boot_timeout = 600
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "256"
-  end
+  config.vbguest.auto_update = false
+  config.vbguest.no_remote = true
+  config.vbguest.no_install  = true
 
+  config.vm.network :public_network, bridge: "en0: Wi-Fi"
   config.vm.synced_folder './shared', '/var/log', SharedFoldersEnableSymlinksCreate: false
 
-  config.vm.define "base" do |base|
-    base.vm.box = "hashicorp/bionic64"
-    base.vm.hostname = "base"
-
-    base.vm.provider :virtualbox do |v|
-      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-      v.customize ["modifyvm", :id, "--memory", 256]
-      v.customize ["modifyvm", :id, "--name", "base"]
-    end
-
-    base.vm.provision "ansible" do |ansible|
-      ansible.playbook = "./provisioning/playbook.yml"
-
-      ansible.groups = {
-        "base" => ["base"]
-      }
-    end
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.memory = "256"
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
   end
 
-  app_server_host = "192.168.33.10"
-  app_server_port = 514
+  app_server_host = "192.168.56.4"
+  app_server_port = 8080
   config.vm.define "app" do |app|
-    app.vm.box = "base.box"
+    app.vm.box = "ubuntu/bionic64"
     app.vm.hostname = "app"
 
-    app.vm.network :private_network, ip: app_server_host
+    app.vm.network :forwarded_port, guest: 22, host: 2222
+    app.vm.network :forwarded_port, guest: 80, host: app_server_port
+    app.vm.network :public_network, ip: app_server_host, bridge: "en0: Wi-Fi"
 
     app.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-      v.customize ["modifyvm", :id, "--memory", 256]
+      v.customize ["modifyvm", :id, "--memory", 512]
       v.customize ["modifyvm", :id, "--name", "app"]
     end
 
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "./provisioning/playbook.yml"
-
       ansible.groups = {
-        "appserver" => ["app"]
+        "appserver" => "app"
       }
-
+      ansible.raw_arguments = ["--flush-cache"]
       ansible.host_vars = {
         "app" => { 
           "nginx_log_dir" => "/var/log/nginx",
           "app_server_host" => app_server_host,
-          "app_server_port" => app_server_port
+          "app_server_port" => app_server_port,
+          "javaapp_host" => "0.0.0.0",
+          "javaapp_port" => 8050,
+          "pythonapp_host" => "0.0.0.0",
+          "pythonapp_port" => 8030,
+          "golangapp_host" => "0.0.0.0",
+          "golangapp_port" => 8040
         }
       }
     end

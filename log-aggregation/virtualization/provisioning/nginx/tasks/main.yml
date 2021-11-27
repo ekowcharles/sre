@@ -1,6 +1,3 @@
-- name: Create www user
-  import_tasks: user.yml
-
 - name: Update package "nginx" to latest version
   apt:
     name: nginx

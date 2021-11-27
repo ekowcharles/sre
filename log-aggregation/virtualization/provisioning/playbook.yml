@@ -1,11 +1,7 @@
 ---
-- hosts: base
-  become: true
-  roles:
-    - role: base
-
 - hosts: appserver
   become: yes
   roles:
     - role: base
+    - role: apps
     - role: nginx

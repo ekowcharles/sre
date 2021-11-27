@@ -1,13 +1,6 @@
 ---
 apps_dir: /usr/local/bin
 apps:
-  javaapp:
-    artifacts:
-      - javapp-1.0-SNAPSHOT.jar
-      - config.yml
-  pythonapp:
-    artifacts:
-      - pythonapp.zip
-  golangapp:
-    artifacts:
-      - golangapp
+  - javaapp
+  - pythonapp
+  - golangapp

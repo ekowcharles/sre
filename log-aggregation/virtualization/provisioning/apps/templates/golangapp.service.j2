@@ -3,11 +3,13 @@ Description=golangapp running on port 8040
 
 [Service]
 Type=simple
+Restart=always
 Environment="PORT=8040"
 Environment="APP_VERSION=0.1.0"
 Environment="LOAD_BALANCER_URL=http://localhost:80/"
 ExecStart={{ apps_dir }}/golangapp/golangapp
-ExecStop=/usr/bin/kill $(lsof -i tcp:8040 -t)
+ExecStop=/bin/kill -INT $MAINPID
+ExecReload=/bin/kill -TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target

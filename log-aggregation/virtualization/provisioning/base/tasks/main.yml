@@ -1,15 +1,18 @@
 ---
-- name: Update all packages to their latest version
-  apt:
-    name: "*"
-    state: latest
-
 - name: Update cache
   apt:
     update_cache: yes
     autoclean: yes
     autoremove: yes
 
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+
 - name: Install packages
   apt:
     name: "{{ packages }}"
+
+- name: Create www user
+  import_tasks: user.yml

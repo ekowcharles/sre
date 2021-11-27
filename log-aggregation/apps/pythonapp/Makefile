@@ -15,4 +15,4 @@ run:
 
 package:
 	rm -f pythonapp.zip
-	zip -vr pythonapp.zip ./ -x "*.DS_Store*" "*.zip*" "*__pycache__*" "*venv*"
+	zip -vr pythonapp.zip ./ -x "*.DS_Store*" "*.zip*" "*__pycache__*" "*venv*" "*logs*"

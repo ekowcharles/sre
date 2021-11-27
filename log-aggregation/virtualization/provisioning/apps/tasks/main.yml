@@ -1,4 +1,3 @@
----
 - name: Setup applications
-  import_tasks: apps.yml
-  loop: "{{ apps|dict2items }}"
+  include_tasks: apps.yml
+  loop: "{{ apps }}"

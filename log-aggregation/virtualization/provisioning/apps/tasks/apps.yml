@@ -1,26 +1,24 @@
 ---
-- name: Create {{ item.key }} workspace
-  file:
-    path: "{{ apps_dir }}/{{ item.key }}"
-    state: directory
-  register: workspace
-
-- name: Move application file(s)
-  file:
+- name: Synchronize {{ item }} app directory
+  synchronize:
     src: "{{ item }}"
-    dest: "{{ workspace.path }}/{{item}}"
+    dest: "{{ apps_dir }}"
+
+- name: Move {{ item }} service configuration
+  template:
+    src: "{{ item }}.service.j2"
+    dest: /etc/systemd/system/{{ item }}.service
     owner: "www"
     group: "www"
-  loop: "{{ item.value.artifacts }}"
 
-- name: Move {{ item.key }} service configuration
-  template:
-    src: "{{ item.key }}.service.j2"
-    dest: /etc/systemd/system/{{ item.key }}.service
+- name: Install {{ item }} dependencies
+  pip:
+    requirements: "{{ apps_dir }}/{{ item }}/requirements.pip"
+  when: item == "pythonapp"
 
-- name: Start app service
+- name: Start {{ item }} service
   systemd:
-    name: "{{ item.key }}"
+    name: "{{ item }}"
     state: restarted
     daemon_reload: yes
     enabled: yes

@@ -3,13 +3,15 @@ Description=pythonapp running on port 8030
 
 [Service]
 Type=simple
+Restart=always
 Environment="FLASK_RUN_PORT=8030"
 Environment="FLASK_APP=app"
 Environment="FLASK_ENV=development"
 Environment="APP_VERSION=0.1.0"
 Environment="FLASK_RUN_HOST=0.0.0.0"
-ExecStart=flask run {{ apps_dir }}/pythonapp/pythonapp
-ExecStop=/usr/bin/kill $(lsof -i tcp:8030 -t)
+ExecStart=/usr/local/bin/flask run {{ apps_dir }}/pythonapp/pythonapp
+ExecStop=/bin/kill -INT $MAINPID
+ExecReload=/bin/kill -TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target
