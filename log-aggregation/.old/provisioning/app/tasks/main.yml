@@ -1,5 +1,0 @@
-- name: Setup go
-  import_tasks: go.yml
-
-- name: Run ping
-  import_tasks: ping.yml

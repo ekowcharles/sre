@@ -1,5 +1,0 @@
----
-packages:
-  - auditd
-  - audispd-plugins
-  - rsyslog

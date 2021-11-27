@@ -1,6 +1,0 @@
----
-users:
-  www:
-    comment: nginx user
-    uid: 3090
-    group: "www"
