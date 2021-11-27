@@ -2,16 +2,14 @@
   group:
     name: "{{ item.value.group }}"
     state: present
-  with_dict: "{{ users }}"
 
 - name: Enable passwordless sudo for group
   lineinfile:
     path: /etc/sudoers
     regexp: '^%{{ item.value.group }}'
-    line: '^%{{ item.value.group }} ALL=(ALL) NOPASSWD: ALL'
+    line: '^%{{ item.value.group }} ALL=(ALL) NOPASSWD:ALL'
     validate: 'visudo -cf %s'
     state: present
-  with_dict: "{{ users }}"
 
 - name: Create user
   user:
@@ -19,18 +17,15 @@
     comment: "{{ item.value.comment }}"
     uid: "{{ item.value.uid }}"
     group: "{{ item.value.group }}"
-  with_dict: "{{ users }}"
 
 - name: Add public key for created user
   authorized_key:
     user: "{{ item.key }}"
     key: "{{ lookup('file', './public_keys/{{ item.key }}.pub') }}"
     state: present
-  with_dict: "{{ users }}"
 
 - name: Add sudoers to group
   user:
     name: "{{ item.key }}"
     groups: ["{{ item.value.group }}"]
     append: yes
-  with_dict: "{{ users }}"

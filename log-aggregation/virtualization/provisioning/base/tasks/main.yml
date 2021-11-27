@@ -15,4 +15,5 @@
     name: "{{ packages }}"
 
 - name: Create www user
-  import_tasks: user.yml
+  include_tasks: user.yml
+  loop: "{{ users | dict2items }}"
