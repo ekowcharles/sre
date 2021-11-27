@@ -1,5 +1,7 @@
 # Log Aggregation
 
+This SRE module shows how metrics and logs are aggregated from multiple services into Graphite and Elasticsearch respectively.
+
 ## Design
 
 ![Flow of logs](./docs/images/flow.png)
