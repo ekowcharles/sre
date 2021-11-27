@@ -6,6 +6,11 @@
 
 ## Getting Started
 
+```sh
+cd virtualization
+make all
+```
+
 ### Installations
 
 1. [golang](https://golang.org/doc/install)

@@ -1,7 +1,3 @@
-base:
-	vagrant up base
-	vagrant package --base base --output base.box
-
 prepare:
 	mkdir -p ./provisioning/apps/files/golangapp ./provisioning/apps/files/javaapp ./provisioning/apps/files/pythonapp
 	cd ../apps/golangapp && $(MAKE) package && \
@@ -22,7 +18,6 @@ destroy:
 	rm -f *.box
 	rm -rf .vagrant
 
-
 clean:
 	$(MAKE) destroy
 
@@ -31,4 +26,3 @@ clean:
 	rm -rf virtualization/provisioning/apps/files/javaapp
 
 	rm -rf "/Users/ekowcharles/VirtualBox VMs/app"
-	rm -rf "/Users/ekowcharles/VirtualBox VMs/base"

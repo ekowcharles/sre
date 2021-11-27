@@ -8,7 +8,6 @@ Vagrant.configure("2") do |config|
   config.vbguest.no_remote = true
   config.vbguest.no_install  = true
 
-  config.vm.network :public_network, bridge: "en0: Wi-Fi"
   config.vm.synced_folder './shared', '/var/log', SharedFoldersEnableSymlinksCreate: false
 
   config.vm.provider "virtualbox" do |vb|
@@ -26,7 +25,7 @@ Vagrant.configure("2") do |config|
 
     app.vm.network :forwarded_port, guest: 22, host: 2222
     app.vm.network :forwarded_port, guest: 80, host: app_server_port
-    app.vm.network :public_network, ip: app_server_host, bridge: "en0: Wi-Fi"
+    app.vm.network :private_network, ip: app_server_host, bridge: "en0: Wi-Fi"
 
     app.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
