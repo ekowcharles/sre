@@ -1,5 +1,9 @@
 # apps
 
+This section contains code written in Golang, Java and Python. Each codebase represents a web application which exposes a couple of endpoints as described below.
+
+Each app logs to a specified directory. The logs generated are the subject of the log aggregation strategy demonstrated by this SRE module.
+
 ## Application Endpoints
 
 |Endpoint|Feature|
