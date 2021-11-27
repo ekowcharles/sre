@@ -4,6 +4,12 @@
     src: "{{ item }}"
     dest: "{{ apps_dir }}"
 
+- name: Create {{ item }} log directory
+  file:
+    dest: "{{ log_dir }}/{{ item }}"
+    state: directory
+    mode: "0755"
+
 - name: Move {{ item }} service configuration
   template:
     src: "{{ item }}.service.j2"

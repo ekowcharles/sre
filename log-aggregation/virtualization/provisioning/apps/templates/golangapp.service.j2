@@ -6,8 +6,9 @@ Type=simple
 Restart=always
 Environment="PORT=8040"
 Environment="APP_VERSION=0.1.0"
+Environment="DW_LOG_DIR={{ log_dir }}/golangapp"
 Environment="LOAD_BALANCER_URL=http://localhost:80/"
-ExecStart={{ apps_dir }}/golangapp/golangapp
+ExecStart=/bin/sh {{ apps_dir }}/golangapp/golangapp
 ExecStop=/bin/kill -INT $MAINPID
 ExecReload=/bin/kill -TERM $MAINPID
 

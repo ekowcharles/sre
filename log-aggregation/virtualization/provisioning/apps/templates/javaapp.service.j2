@@ -6,6 +6,7 @@ Type=simple
 Restart=always
 Environment="DW_PORT=8050"
 Environment="DW_VERSION=0.1.0"
+Environment="DW_LOG_DIR={{ log_dir }}/javaapp"
 ExecStart=/usr/bin/java -jar target/javapp-1.0-SNAPSHOT.jar server {{ apps_dir }}/javaapp/config.yml
 ExecStop=/bin/kill -INT $MAINPID
 ExecReload=/bin/kill -TERM $MAINPID

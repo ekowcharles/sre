@@ -1,5 +1,6 @@
 ---
 apps_dir: /usr/local/bin
+log_dir: /var/log
 apps:
   - javaapp
   - pythonapp
