@@ -8,19 +8,21 @@ prepare:
 						  cp target/javapp-1.0-SNAPSHOT.jar ../../virtualization/provisioning/apps/files/javaapp && \
 						  cp config.yml ../../virtualization/provisioning/apps/files/javaapp
 
-all:
-	$(MAKE) prepare
-	vagrant provision app
-	vagrant up app
-
 converge:
 	$(MAKE) prepare
+	vagrant provision app
+
+provision:
 	vagrant provision app
 
 destroy:
 	vagrant destroy --force
 	rm -f *.box
 	rm -rf .vagrant
+
+all:
+	$(MAKE) converge
+	vagrant up app
 
 clean:
 	$(MAKE) destroy

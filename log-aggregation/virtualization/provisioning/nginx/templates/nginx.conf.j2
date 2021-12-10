@@ -1,23 +1,27 @@
-user       www www;  ## Default: nobody
-worker_processes  5;  ## Default: 1
+user       www www;
+worker_processes  5;
 error_log {{ nginx_log_dir }}/error.log;
 pid        /run/nginx.pid;
 
 worker_rlimit_nofile 8192;
 
 events {
-  worker_connections  4096;  ## Default: 1024
+  worker_connections  4096;
 }
 
 http {
-  log_format   main '$remote_addr - $remote_user [$time_local]  $status '
-    '"$request" $body_bytes_sent "$http_referer" '
-    '"$http_user_agent" "$http_x_forwarded_for"';
-  access_log   {{ nginx_log_dir }}/access.log;
+  log_format  apm 'remote_addr=$remote_addr remote_user=$remote_user [$time_local] status=$status '
+                  'request="$request" request_time=$request_time upstream_addr="$upstream_addr" '
+                  'upstream_connect_time=$upstream_connect_time upstream_response_time=$upstream_response_time '
+                  'body_bytes_sent=$body_bytes_sent http_referer="$http_referer" http_user_agent="$http_user_agent" '
+                  'http_x_forwarded_for="$http_x_forwarded_for"';
+
+  access_log   {{ nginx_log_dir }}/access.log apm;
+
   keepalive_timeout  65;
   sendfile     off;
   tcp_nopush   on;
-  server_names_hash_bucket_size 128; # this seems to be required for some vhosts
+  server_names_hash_bucket_size 128;
 
   upstream logger_app_com {
     server {{ javaapp_host }}:{{ javaapp_port }} weight=5;
@@ -25,18 +29,35 @@ http {
     server {{ golangapp_host }}:{{ golangapp_port }} weight=5;
   }
 
-  server { # simple load balancing
+  server {
     listen          80;
 
     server_name     logger.app.com;
     access_log      {{ nginx_log_dir }}/access.log;
 
-    location / {
-      proxy_set_header Host      $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      
-      proxy_next_upstream_tries 2;
+    proxy_set_header Host      $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_next_upstream_tries  2;
 
+    location ^~ /python {
+      rewrite ^/python/(.*)$ /$1 last;
+      
+      proxy_pass      http://{{ pythonapp_host }}:{{ pythonapp_port }};
+    }
+
+    location ^~ /java {
+      rewrite ^/java/(.*)$ /$1 last;
+
+      proxy_pass      http://{{ javaapp_host }}:{{ javaapp_port }};
+    }
+
+    location ^~ /golang {
+      rewrite ^/golang/(.*)$ /$1 last;
+
+      proxy_pass      http://{{ golangapp_host }}:{{ golangapp_port }};
+    }
+
+    location / {
       proxy_pass      http://logger_app_com;
     }
   }

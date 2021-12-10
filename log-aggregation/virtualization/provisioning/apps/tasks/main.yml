@@ -3,7 +3,7 @@
     path: /etc/polkit-1/rules.d
     state: directory
 
-- name: Ensures /etc/polkit-1/rules.d dir exists
+- name: Copy rules
   copy:
     src: 57-manage-units.rules
     dest: /etc/polkit-1/rules.d

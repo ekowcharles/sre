@@ -25,6 +25,14 @@ The location of the logs that are being aggregated are as follows:
 
 ## Usage
 
+1. Run `make all`
+1. Run `curl http://localhost:8080` to use the nginx load balancer to route to any of the application endpoints
+1. Run `curl http://localhost:8080/python/` to use pythonapp endpoints
+1. Run `curl http://localhost:8080/java/` to use javaapp endpoints
+1. Run `curl http://localhost:8080/golang/` to use golangapp endpoints
+
+See [here](../apps/README.md) for application endpoints and descriptions.
+
 ## Stack
 
 1. [virtualbox](https://www.virtualbox.org/)
