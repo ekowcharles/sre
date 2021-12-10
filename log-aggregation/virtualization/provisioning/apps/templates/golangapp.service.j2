@@ -4,6 +4,8 @@ Description=golangapp running on port 8040
 [Service]
 Type=simple
 Restart=always
+User=www
+Group=www
 Environment="PORT=8040"
 Environment="APP_VERSION=0.1.0"
 Environment="DW_LOG_DIR={{ log_dir }}/golangapp"

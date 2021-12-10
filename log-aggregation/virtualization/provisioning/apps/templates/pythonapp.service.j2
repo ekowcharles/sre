@@ -4,6 +4,8 @@ Description=pythonapp running on port 8030
 [Service]
 Type=simple
 Restart=always
+User=www
+Group=www
 Environment="FLASK_RUN_PORT=8030"
 Environment="FLASK_APP=app"
 Environment="FLASK_ENV=development"

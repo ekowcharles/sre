@@ -1,3 +1,18 @@
+- name: Ensures /etc/polkit-1/rules.d dir exists
+  file:
+    path: /etc/polkit-1/rules.d
+    state: directory
+
+- name: Ensures /etc/polkit-1/rules.d dir exists
+  copy:
+    src: 57-manage-units.rules
+    dest: /etc/polkit-1/rules.d
+    mode: "0755"
+
 - name: Setup applications
   include_tasks: apps.yml
   loop: "{{ apps }}"
+
+- name: Just force systemd to reread configs
+  systemd:
+    daemon_reload: yes
