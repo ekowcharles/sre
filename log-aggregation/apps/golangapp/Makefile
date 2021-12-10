@@ -13,3 +13,4 @@ run:
 package:
 	rm -f golangapp
 	GO111MODULE=auto GOOS=linux GOARCH=arm64 go build
+	chmod +x golangapp
