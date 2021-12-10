@@ -17,8 +17,9 @@ HTTP_STATUS_CODES = list(map(lambda x: x.value, HTTPStatus))
 HTTP_STATUS_CODES_COUNT = len(HTTP_STATUS_CODES)
 
 APP_VERSION = os.environ.get('APP_VERSION')
+APP_PATH = os.environ.get('APP_PATH')
 
-config = parse_config('./logging.yaml')
+config = parse_config(f'{APP_PATH}/logging.yaml')
 logging.config.dictConfig(config)
 
 app = create_app()

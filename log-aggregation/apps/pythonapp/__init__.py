@@ -14,6 +14,5 @@ def create_app():
     app.url_map.add(Rule('/exception', endpoint='exception'))
 
     app.logger.info('pythonapp.started')
-    app.logger.info('pythonapp.foo')
 
     return app

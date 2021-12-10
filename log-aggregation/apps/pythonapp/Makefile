@@ -14,6 +14,7 @@ run:
 	  FLASK_APP=app \
 	  FLASK_ENV=development \
 	  APP_VERSION=0.1.0 \
+	  APP_PATH=`pwd` \
         flask run --host=0.0.0.0 --port 8030; \
 	)
 

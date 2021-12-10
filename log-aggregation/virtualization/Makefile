@@ -13,6 +13,10 @@ all:
 	vagrant provision app
 	vagrant up app
 
+converge:
+	$(MAKE) prepare
+	vagrant provision app
+
 destroy:
 	vagrant destroy --force
 	rm -f *.box

@@ -1,5 +1,5 @@
 [Unit]
-Description=pythonapp running on port 8030
+Description=pythonapp on port 8030
 
 [Service]
 Type=simple
@@ -7,12 +7,13 @@ Restart=always
 User=www
 Group=www
 Environment="FLASK_RUN_PORT=8030"
-Environment="FLASK_APP=app"
+Environment="FLASK_APP={{ apps_dir }}/pythonapp/app"
 Environment="FLASK_ENV=development"
 Environment="APP_VERSION=0.1.0"
+Environment="APP_PATH={{ apps_dir }}/pythonapp"
 Environment="FLASK_RUN_HOST=0.0.0.0"
 Environment="LOG_DIR={{ log_dir }}/pythonapp"
-ExecStart=/usr/local/bin/flask run {{ apps_dir }}/pythonapp
+ExecStart=/usr/local/bin/flask run
 ExecStop=/bin/kill -INT $MAINPID
 ExecReload=/bin/kill -TERM $MAINPID
 
