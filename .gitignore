@@ -21,6 +21,7 @@ __pycache__
 .vscode/
 
 log-aggregation/apps/javaapp/.*
+log-aggregation/apps/javaapp/dependency-reduced-pom.xml
 
 target
 *.jar
