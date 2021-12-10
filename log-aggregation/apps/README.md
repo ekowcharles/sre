@@ -15,6 +15,11 @@ Each app logs to a specified directory. The logs generated are the subject of th
 
 All endpoints are HTTP method agnostic except for requests to the javaapp.
 
+## Before you start
+
+1. Install [golang](https://golang.org/doc/install)
+1. Install [mvn](https://maven.apache.org/install.html)
+
 ## References
 
 1. HTTP response codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status

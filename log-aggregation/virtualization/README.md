@@ -15,6 +15,10 @@ The location of the logs that are being aggregated are as follows:
 
 ## Before you start
 
+## Before you start
+
+1. Install [golang](https://golang.org/doc/install)
+1. Install [mvn](https://maven.apache.org/install.html)
 1. Run the following in your favorite terminal to generate a key pair:
    ```sh
    ssh-keygen -m PEM -t rsa -b 4096
